@@ -10,21 +10,20 @@ import myFirstReducer from './reducer';
 import mySaga from './sagas';
 
 const sagaMiddleware = createSagaMiddleware();
+
 const store = configureStore({
-  reducer: { 
-    myFirstReducer
-  }, 
-  middleware: [sagaMiddleware], 
-  devTools: process.env.NODE_ENV !== 'production', // Enable Redux DevTools in development
+  reducer: {
+    myFirstReducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(sagaMiddleware),
+  devTools: process.env.NODE_ENV !== 'production',
 });
 
-// const store = createStore(
-//   allReducers, 
-//   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-// );
+sagaMiddleware.run(mySaga);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <App />
-  </Provider>,
-)
+  </Provider>
+);
